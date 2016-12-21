@@ -1,18 +1,24 @@
-
 public class Main {
 
+	public static String filePath = "./input/esmo.txt";
+	
 	public static void main(String[] args) {
-		CharMap charMap = new CharMap();
-		charMap.readFile("D:/Downloads/esmo.txt");
-		System.out.println(charMap.toString());
 		
-		/*
-		WordConstructor wordConstructor = new WordConstructor();
-		wordConstructor.readFile("D:/Downloads/esmo.txt");
-		for(int i=0; i<1000; i++)
-			wordConstructor.inventWord();
-		/*
-		for(int i=3; i<9; i++)
-			System.out.println(wordConstructor.getWordsWithLength(i));*/
+		CharMap charMap = new CharMap();
+		charMap.readFile(filePath);
+		Skill.setCharMap(charMap);
+		Population initPop = new Population();
+		initPop.fillPopulationFromFile(filePath);
+
+		for(int i = 0; i < 1; i++) {
+			System.out.println("Génération "+i);
+			initPop = Algorithm.evolvePopulation(initPop);
+		}
+		
+		System.out.println("Individus finaux :");
+		int size = initPop.size();
+		for(int i = 0; i < size; i++) {
+			System.out.println(initPop.getIndividual(i).toString());
+		}
 	}
 }
