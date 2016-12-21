@@ -12,7 +12,9 @@ public class Algorithm {
 	private static final int WORD_CUT_SIZE_MAX = 3;
 	
     private static final double MUTATION_RATE = 0.00015;
-    private static final int TOURNAMENT_SIZE = 5; 
+    private static final int TOURNAMENT_SIZE = 5;
+    
+    private static final int IDEAL_POPULATION_SIZE = 20; 
  
     // Evolve a population
     public static Population evolvePopulation(Population pop) {
@@ -21,7 +23,7 @@ public class Algorithm {
  
         // Loop over the population size and create new individuals with
         // crossover
-        for (int i = 0; i < pop.size(); i++) {
+        for (int i = 0; i < IDEAL_POPULATION_SIZE; i++) {
             Individual indiv1 = tournamentSelection(pop);
             Individual indiv2 = tournamentSelection(pop);
             Individual newIndiv = crossover(indiv1, indiv2);
@@ -55,10 +57,12 @@ public class Algorithm {
         int wordCutNumber = WORD_CUT_NUMBER_MIN + (int)(Math.random() * WORD_CUT_NUMBER_BONUS);
         for(int i = 0; i < wordCutNumber; i++) {
         	int rand = (int) Math.round(Math.random());
-        	int wordCutSize = WORD_CUT_SIZE_MIN + (int)(Math.random() * Math.min(WORD_CUT_SIZE_MAX, parents[rand].size()));
-        	int startCutIndex = (int) ((parents[rand].size() - wordCutSize + 1) * Math.random());
-        	for(int j = startCutIndex; j < wordCutSize; j++) {
-        		word += parents[rand].getGene(j);
+        	int beginCutIndex = (int) (Math.random() * size[rand]);
+        	int cutSize = WORD_CUT_SIZE_MIN + (int)(Math.random() * Math.min(WORD_CUT_SIZE_MAX, parents[rand].size()));
+        	int endCutIndex = beginCutIndex + cutSize;
+        	for(int j = beginCutIndex; j < endCutIndex; j++) {
+        		if(j < parents[rand].size())
+        			word += parents[rand].getGene(j);
         	}
         }
         
@@ -68,9 +72,7 @@ public class Algorithm {
     private static void mutate(Individual indiv) {
         for (int i = 0; i < indiv.size(); i++) {
             if (Math.random() <= MUTATION_RATE) {
-                //indiv.setGene(i, charactersEnumeration.getRandomCharacter());
-            	Random random = new Random();
-            	indiv.setGene(i, (char)('a' + random.nextInt(26)));
+            	indiv.setGene(i, (char)('a' + (int)(Math.random()*26)));
             }
         }
     }

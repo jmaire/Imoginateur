@@ -1,3 +1,4 @@
+
 public class Individual {
 
 	private char[] genes = null;
@@ -20,14 +21,21 @@ public class Individual {
 	public char getGene(int index) {
 		return genes[index];
 	}
-
+	
+	public char[] getGenes() {
+		return genes;
+	}
+	
 	public void setGene(int index, char value) {
 		genes[index] = value;
 		competence = null;
 	}
 
 	public int size() {
-		return genes.length;
+		if(null == genes)
+			return -1;
+		else
+			return genes.length;
 	}
 
 	public int getCompetence() {
@@ -39,10 +47,6 @@ public class Individual {
 
 	@Override
 	public String toString() {
-		String geneString = "";
-		for (int i = 0; i < size(); i++) {
-			geneString += getGene(i);
-		}
-		return geneString;
+		return String.valueOf(genes);
 	}
 }

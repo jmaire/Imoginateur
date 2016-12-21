@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Skill {
  
 	private static CharMap charMap = null;
@@ -12,16 +14,25 @@ public class Skill {
     	if(size <= 0)
     		return 0;
     	
-        int skill = charMap.getOccurence(CharMap.BEGIN_VALUE + "", individual.getGene(0));
-        
-        size--;
-        for (int i = 0; i < size; i++) {
-            skill += charMap.getOccurence(individual.getGene(i) + "", individual.getGene(i+1));
+    	char[] genes = new char[size+2];
+    	
+    	for(int i=0; i<size; i++)
+    		genes[i+1] = individual.getGene(i);
+    	
+    	genes[0] = CharMap.BEGIN_VALUE;
+    	genes[size+1] = CharMap.END_VALUE;
+    	
+        int skill = 0;
+        for (int i = 0; i < genes.length; i++) {
+        	for (int j = 1; j < 5; j++) {
+        		if (genes.length - i > j) {
+        			char[] pre = Arrays.copyOfRange(genes, i, i+j);
+        			skill += j*charMap.getOccurence(String.copyValueOf(pre), genes[i+j]);
+        		}
+        	}
         }
         
-        skill += charMap.getOccurence(individual.getGene(size) + "", CharMap.END_VALUE);
-        
-        skill /= size + 2;
+        skill = Math.round(skill * 100 / (size+1));
         return skill;
     }
     

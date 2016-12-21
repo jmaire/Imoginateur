@@ -1,6 +1,8 @@
+import java.util.Arrays;
+
 public class Main {
 
-	public static String filePath = "./input/esmo.txt";
+	public static String filePath = "./input/f.txt";
 	
 	public static void main(String[] args) {
 		
@@ -10,7 +12,7 @@ public class Main {
 		Population initPop = new Population();
 		initPop.fillPopulationFromFile(filePath);
 
-		for(int i = 0; i < 1; i++) {
+		for(int i = 0; i < 5; i++) {
 			System.out.println("Génération "+i);
 			initPop = Algorithm.evolvePopulation(initPop);
 		}
@@ -18,7 +20,9 @@ public class Main {
 		System.out.println("Individus finaux :");
 		int size = initPop.size();
 		for(int i = 0; i < size; i++) {
-			System.out.println(initPop.getIndividual(i).toString());
+			System.out.println(initPop.getIndividual(i) + " : " + initPop.getIndividual(i).getCompetence());
 		}
+		
+		System.out.println("Gagnant : " + initPop.getMoreCompetent());
 	}
 }
