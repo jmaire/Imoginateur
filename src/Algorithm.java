@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.ArrayList;
 
 public class Algorithm {
  
@@ -13,29 +13,36 @@ public class Algorithm {
 	
     private static final double MUTATION_RATE = 0.00015;
     private static final int TOURNAMENT_SIZE = 5;
-    
-    private static final int IDEAL_POPULATION_SIZE = 20; 
  
     // Evolve a population
     public static Population evolvePopulation(Population pop) {
-        Population newPopulation = new Population();
-        //newPopulation.fillPopulationFromFile(filePath);
+    	int size = pop.size();
+    	for(int i = 0; i < size; i++) {
+    		pop.getIndividual(i).increaseLifespan();
+    	}
  
-        // Loop over the population size and create new individuals with
-        // crossover
-        for (int i = 0; i < IDEAL_POPULATION_SIZE; i++) {
+    	int newIndivNumber = pop.size()/2;
+    	ArrayList<Individual> newIndivs = new ArrayList<Individual>();
+        for (int i = 0; i < newIndivNumber; i++) {
             Individual indiv1 = tournamentSelection(pop);
             Individual indiv2 = tournamentSelection(pop);
             Individual newIndiv = crossover(indiv1, indiv2);
-            newPopulation.insereIndividual(newIndiv);
+            mutate(newIndiv);
+            newIndivs.add(newIndiv);
+        }
+
+        for(int i = 0; i < pop.size(); i++) {
+        	Individual indiv = pop.getIndividual(i);
+        	if (!surviveTest(indiv)) {
+        		pop.removeIndividual(indiv);
+        	}
+        }
+        
+        for(int i = 0; i < newIndivs.size(); i++) {
+        	pop.insereIndividual(newIndivs.get(i));
         }
  
-        // Mutate population
-        for (int i = 0; i < newPopulation.size(); i++) {
-            mutate(newPopulation.getIndividual(i));
-        }
- 
-        return newPopulation;
+        return pop;
     }
  
     // Crossover individuals
@@ -90,5 +97,13 @@ public class Algorithm {
         // Get the fittest
         Individual fittest = tournament.getMoreCompetent();
         return fittest;
+    }
+    
+    private static boolean surviveTest(Individual indiv) {
+    	if(indiv.getCompetence() <= 0)
+    		return false;
+    	
+    	double deathChance = indiv.getLifespan()/(indiv.getLifespan()+1.f);
+    	return Math.random() >= deathChance;
     }
 }

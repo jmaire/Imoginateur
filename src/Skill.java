@@ -22,18 +22,18 @@ public class Skill {
     	genes[0] = CharMap.BEGIN_VALUE;
     	genes[size+1] = CharMap.END_VALUE;
     	
-        int skill = 0;
+        float skill = 0;
         for (int i = 0; i < genes.length; i++) {
         	for (int j = 1; j < 5; j++) {
         		if (genes.length - i > j) {
         			char[] pre = Arrays.copyOfRange(genes, i, i+j);
-        			skill += j*charMap.getOccurence(String.copyValueOf(pre), genes[i+j]);
+        			skill += j*10.f/(j+1.f)*(float)(charMap.getOccurence(String.copyValueOf(pre), genes[i+j]));
         		}
         	}
         }
         
-        skill = Math.round(skill * 100 / (size+1));
-        return skill;
+        skill = skill * 10.f / (float)(size+1);
+        return Math.round(skill);
     }
     
 }

@@ -3,6 +3,7 @@ public class Individual {
 
 	private char[] genes = null;
 	private Integer competence = null;
+	private int lifespan = 0;
 	
 	public Individual() {}
 	
@@ -45,6 +46,14 @@ public class Individual {
 		return competence;
 	}
 
+	public void increaseLifespan() {
+		lifespan++;
+	}
+	
+	public int getLifespan() {
+		return lifespan;
+	}
+	
 	@Override
 	public String toString() {
 		return String.valueOf(genes);

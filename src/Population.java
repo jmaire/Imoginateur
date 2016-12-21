@@ -28,7 +28,7 @@ public class Population {
 		}
     }
  
-    public Individual getIndividual(final int index) {
+    public Individual getIndividual(int index) {
         return individuals.get(index);
     }
  
@@ -49,5 +49,9 @@ public class Population {
     
     public void insereIndividual(Individual indiv) {
         individuals.add(indiv);
-    }    
+    }
+    
+    public void removeIndividual(Individual indiv) {
+    	individuals.remove(indiv);
+    }
 }
