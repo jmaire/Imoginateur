@@ -2,7 +2,7 @@
 public class Individual {
 
 	private char[] genes = null;
-	private Integer competence = null;
+	private Double competence = null;
 	private int lifespan = 0;
 	
 	public Individual() {}
@@ -39,7 +39,7 @@ public class Individual {
 			return genes.length;
 	}
 
-	public int getCompetence() {
+	public double getCompetence() {
 		if (competence == null) {
 			competence = Skill.getSkill(this);
 		}

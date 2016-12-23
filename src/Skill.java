@@ -8,7 +8,7 @@ public class Skill {
 		charMap = cm;
 	}
 	
-    public static int getSkill(Individual individual) {
+    public static double getSkill(Individual individual) {
     	int size = individual.size();
     	
     	if(size <= 0)
@@ -27,13 +27,13 @@ public class Skill {
         	for (int j = 1; j < 5; j++) {
         		if (genes.length - i > j) {
         			char[] pre = Arrays.copyOfRange(genes, i, i+j);
-        			skill += j*10.f/(j+1.f)*(float)(charMap.getOccurence(String.copyValueOf(pre), genes[i+j]));
+        			skill += j/(j+1.f) * charMap.getFrequency(String.copyValueOf(pre), genes[i+j]) * charMap.getOccurence(String.copyValueOf(pre), genes[i+j]);
         		}
         	}
         }
         
-        skill = skill * 10.f / (float)(size+1);
-        return Math.round(skill);
+        skill = (float) (skill * 100.f / Math.sqrt(size+1.f));
+        return skill;
     }
     
 }

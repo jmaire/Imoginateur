@@ -5,14 +5,12 @@ public class Algorithm {
 	//private static CharactersEnumeration charactersEnumeration = new CharactersEnumeration();
 	
 	//private static final double UNIFORM_RATE = 0.5;
-	
-	private static final int WORD_CUT_NUMBER_MIN = 2;
-	private static final int WORD_CUT_NUMBER_BONUS = 4;
+
 	private static final int WORD_CUT_SIZE_MIN = 1;
-	private static final int WORD_CUT_SIZE_MAX = 3;
+	private static final int WORD_CUT_SIZE_BONUS = 5;
 	
     private static final double MUTATION_RATE = 0.00015;
-    private static final int TOURNAMENT_SIZE = 5;
+    private static final int TOURNAMENT_SIZE = 10;
  
     // Evolve a population
     public static Population evolvePopulation(Population pop) {
@@ -58,22 +56,20 @@ public class Algorithm {
         int[] size = new int[2];
         size[0] = parents[0].size();
         size[1] = parents[1].size();
-       
         
-        String word = "";
-        int wordCutNumber = WORD_CUT_NUMBER_MIN + (int)(Math.random() * WORD_CUT_NUMBER_BONUS);
-        for(int i = 0; i < wordCutNumber; i++) {
-        	int rand = (int) Math.round(Math.random());
-        	int beginCutIndex = (int) (Math.random() * size[rand]);
-        	int cutSize = WORD_CUT_SIZE_MIN + (int)(Math.random() * Math.min(WORD_CUT_SIZE_MAX, parents[rand].size()));
-        	int endCutIndex = beginCutIndex + cutSize;
+        String newWord = "";
+        double wordSizeAverage = indiv1.size() + indiv2.size();
+        do {
+        	int parentIndex = (int) Math.round(Math.random());
+        	int beginCutIndex = (int) (Math.random() * size[parentIndex]);
+        	int cutSize = WORD_CUT_SIZE_MIN + (int)(Math.random() * WORD_CUT_SIZE_BONUS);
+        	int endCutIndex = Math.min(beginCutIndex + cutSize, parents[parentIndex].size());
         	for(int j = beginCutIndex; j < endCutIndex; j++) {
-        		if(j < parents[rand].size())
-        			word += parents[rand].getGene(j);
+        		newWord += parents[parentIndex].getGene(j);
         	}
-        }
+        } while(Math.random() > newWord.length()/wordSizeAverage);
         
-        return new Individual(word);
+        return new Individual(newWord);
     }
  
     private static void mutate(Individual indiv) {
@@ -83,8 +79,7 @@ public class Algorithm {
             }
         }
     }
- 
-    // Select individuals for crossover
+
     private static Individual tournamentSelection(Population pop) {
         // Create a tournament population
         Population tournament = new Population();
@@ -106,4 +101,5 @@ public class Algorithm {
     	double deathChance = indiv.getLifespan()/(indiv.getLifespan()+1.f);
     	return Math.random() >= deathChance;
     }
+
 }

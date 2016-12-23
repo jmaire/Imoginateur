@@ -2,24 +2,19 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CharMap {
 	
 	public static final char BEGIN_VALUE = '\0';
 	public static final char END_VALUE = '\0';
 	
-	//private HashMap<Character, HashMap<Character, Integer>> m_charMap;
 	private HashMap<String, HashMap<Character, Integer>> stringMap;
-	
-	//private HashMap<Character, HashMap<Character, Float>> m_charMap2;
-	//private HashMap<String, HashMap<Character, Float>> m_stringMap2;
+	private HashMap<String, HashMap<Character, Double>> stringfrequencyMap;
 	
 	public CharMap() {
-		//m_charMap = new HashMap<Character, HashMap<Character, Integer>>();
 		stringMap = new HashMap<String, HashMap<Character, Integer>>();
-
-		//m_charMap2 = new HashMap<Character, HashMap<Character, Float>>();
-		//m_stringMap2 = new HashMap<String, HashMap<Character, Float>>();
+		stringfrequencyMap = new HashMap<String, HashMap<Character, Double>>();
 	}
 	
 	public void readFile(String filePath) {
@@ -42,7 +37,7 @@ public class CharMap {
 				e.printStackTrace();
 			}
 		}
-		//computePourcentage();
+		computePourcentage();
 	}
 	
 	private void insereWord(String word) {
@@ -118,6 +113,16 @@ public class CharMap {
 		return stringMap.get(pre).get(suf);
 	}
 	
+	public double getFrequency(String pre, char suf) {
+		if (!stringfrequencyMap.containsKey(pre))
+			return 0;
+		
+		if (!stringfrequencyMap.get(pre).containsKey(suf))
+			return 0;
+		
+		return stringfrequencyMap.get(pre).get(suf);
+	}
+	
 	/*
 	public char findLetter(String word) {
 		char ch;
@@ -143,29 +148,20 @@ public class CharMap {
 		
 		return lastKey;
 	}
-	/*
+	*/
+	
 	private void computePourcentage() {
-		m_charMap2.clear();
-		for (Map.Entry<Character, HashMap<Character, Integer>> entry1 : m_charMap.entrySet()) {
-			char key = entry1.getKey();
-			m_charMap2.put(key, new HashMap<Character, Float>());
-			int count = getTotal(key);
-			for (Map.Entry<Character, Integer> entry2 : entry1.getValue().entrySet()) {
-				m_charMap2.get(key).put(entry2.getKey(), new Float((float)entry2.getValue() / count));
-			}
-		}
-		
-		m_stringMap2.clear();
-		for (Map.Entry<String, HashMap<Character, Integer>> entry1 : m_stringMap.entrySet()) {
+		stringfrequencyMap.clear();
+		for (Map.Entry<String, HashMap<Character, Integer>> entry1 : stringMap.entrySet()) {
 			String key = entry1.getKey();
-			m_stringMap2.put(key, new HashMap<Character, Float>());
+			stringfrequencyMap.put(key, new HashMap<Character, Double>());
 			int count = getTotal(key);
 			for (Map.Entry<Character, Integer> entry2 : entry1.getValue().entrySet()) {
-				m_stringMap2.get(key).put(entry2.getKey(), new Float((float)entry2.getValue() / count));
+				stringfrequencyMap.get(key).put(entry2.getKey(), new Double((double)entry2.getValue() / count));
 			}
 		}
 	}
-	*/
+	
 	/*
 	private int getTotal(char ch) {
 		int count = 0;
@@ -175,16 +171,17 @@ public class CharMap {
 		}
 		return count;
 	}
+	*/
 	
 	private int getTotal(String ch) {
 		int count = 0;
-		HashMap<Character, Integer> map = m_stringMap.get(ch);
+		HashMap<Character, Integer> map = stringMap.get(ch);
 		for (Map.Entry<Character, Integer> entry : map.entrySet()) {
 			count += entry.getValue();
 		}
 		return count;
 	}
-	
+	/*
 	public String toString() {
 		String string = "";
 		
